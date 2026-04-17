@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Spanisch Lernplattform – Indigene Voelker in Lateinamerika</title>
+  <style>
+    :root{
+      --bg:#0f1221;
+      --panel:#171a2b;
+      --panel-2:#1f2440;
+      --text:#f3f5ff;
+      --muted:#b8bfdc;
+      --accent:#7c9cff;
+      --accent-2:#9f7cff;
+      --good:#34d399;
+      --warn:#fbbf24;
+      --bad:#fb7185;
+      --border:rgba(255,255,255,.10);
+      --shadow:0 10px 30px rgba(0,0,0,.25);
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      background:linear-gradient(180deg,#0d1020,#11162c 45%,#0d1020);
+      color:var(--text);
+    }
+    .wrap{max-width:1180px;margin:0 auto;padding:24px 18px 80px;}
+    .hero{
+      background:linear-gradient(135deg,rgba(124,156,255,.20),rgba(159,124,255,.18));
+      border:1px solid var(--border);border-radius:28px;padding:26px;
+      box-shadow:var(--shadow);backdrop-filter: blur(8px);
+    }
+    h1,h2,h3{margin:0 0 10px}
+    h1{font-size:clamp(28px,4vw,42px); line-height:1.05}
+    h2{font-size:clamp(22px,3vw,30px)}
+    h3{font-size:18px}
+    p{color:var(--muted); line-height:1.6}
+    .chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}
+    .chip{
+      background:rgba(255,255,255,.08);border:1px solid var(--border);
+      color:var(--text);padding:8px 12px;border-radius:999px;font-size:14px;
+    }
+    .grid{display:grid;gap:18px;margin-top:20px}
+    .grid.cols-3{grid-template-columns:repeat(3,1fr)}
+    .grid.cols-2{grid-template-columns:repeat(2,1fr)}
+    @media (max-width: 900px){
+      .grid.cols-3,.grid.cols-2{grid-template-columns:1fr}
+    }
+    .card{
+      background:var(--panel);border:1px solid var(--border);border-radius:24px;
+      padding:20px;box-shadow:var(--shadow);
+    }
+    .subtle{background:var(--panel-2)}
+    .btns{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
+    button, .btn{
+      appearance:none;border:none;cursor:pointer;border-radius:14px;padding:11px 14px;
+      font-weight:700;background:linear-gradient(135deg,var(--accent),var(--accent-2));
+      color:white; box-shadow:var(--shadow);
+    }
+    button.secondary,.btn.secondary{
+      background:rgba(255,255,255,.07);border:1px solid var(--border);box-shadow:none;
+    }
+    button:disabled{
+      opacity:.45; cursor:not-allowed; filter:grayscale(.15);
+    }
+    .progress{
+      width:100%;height:12px;border-radius:999px;background:rgba(255,255,255,.08);
+      overflow:hidden;border:1px solid var(--border);
+    }
+    .progress > div{
+      height:100%;width:0%;
+      background:linear-gradient(90deg,var(--good),var(--accent));
+      transition:width .25s ease;
+    }
+    .kpi{
+      display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:12px
+    }
+    .small{font-size:13px;color:var(--muted)}
+    .topic-list, .bullet{margin:10px 0 0;padding-left:18px;color:var(--text)}
+    .topic-list li, .bullet li{margin:8px 0;line-height:1.5}
+    .tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+    .tab.active{outline:2px solid rgba(124,156,255,.7)}
+    .hidden{display:none}
+    .pill{
+      display:inline-block;padding:4px 9px;border-radius:999px;font-size:12px;
+      background:rgba(52,211,153,.12);color:#b7ffe2;border:1px solid rgba(52,211,153,.2)
+    }
+    textarea, input[type="text"], select{
+      width:100%;background:#0e1120;color:var(--text);border:1px solid var(--border);
+      border-radius:16px;padding:12px 14px;font:inherit;
+    }
+    textarea{min-height:150px;resize:vertical}
+    .qa{display:grid;gap:14px}
+    .answer{
+      background:#0d1020;padding:14px;border-radius:16px;border:1px solid var(--border);
+      min-height:54px
+    }
+    .feedback{margin-top:10px;font-weight:700}
+    .good{color:var(--good)}
+    .warn{color:var(--warn)}
+    .bad{color:var(--bad)}
+    .flex{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+    .stat{
+      flex:1;background:rgba(255,255,255,.05);padding:14px;border-radius:18px;border:1px solid var(--border)
+    }
+    .flash{
+      min-height:180px;display:flex;align-items:center;justify-content:center;text-align:center;
+      font-size:24px;font-weight:800;padding:20px
+    }
+    .divider{height:1px;background:var(--border);margin:18px 0}
+    .footer-note{margin-top:18px;font-size:13px;color:var(--muted)}
+    .tag{
+      font-size:12px;color:#d9dcff;background:rgba(124,156,255,.15);border:1px solid rgba(124,156,255,.25);
+      padding:4px 8px;border-radius:999px
+    }
+    .sentence-bank button{
+      background:rgba(255,255,255,.06);border:1px solid var(--border);box-shadow:none;font-weight:600;
+    }
+    .bar-labels{display:flex;justify-content:space-between;margin-top:8px;font-size:12px;color:var(--muted)}
+    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <section class="hero">
+    <div class="pill">Spanisch Q1 GK – Klausurtrainer</div>
+    <h1>Indigene Voelker in Lateinamerika</h1>
+    <p>Diese Lernplattform fokussiert sich auf dein klausurrelevantes Thema:
+      <strong>Latinoamerica: retos y oportunidades de la diversidad etnica</strong>.
+      Du trainierst Inhalte, Argumente, Kommentar, Resumen, Mediacion und einen Kurz-vor-der-Pruefung-Modus.</p>
+    <div class="chips">
+      <div class="chip">Mapuches</div>
+      <div class="chip">Lenguas indigenas</div>
+      <div class="chip">Discriminacion</div>
+      <div class="chip">Herencia cultural</div>
+      <div class="chip">Comentario</div>
+      <div class="chip">Mediacion</div>
+      <div class="chip">Resumen</div>
+    </div>
+  </section>
+
+  <section class="grid cols-3">
+    <div class="card">
+      <div class="kpi">
+        <h3>Dein Lernstand</h3>
+        <span class="tag" id="stageLabel">Basics</span>
+      </div>
+      <div class="progress"><div id="masteryBar"></div></div>
+      <div class="bar-labels">
+        <span id="masteryPercent">0%</span>
+        <span id="masteryHint">wird aus mehreren Bereichen berechnet</span>
+      </div>
+      <p class="small">Der Lernstand wird aus Karteikarten, Quiz und Schreibaufgaben berechnet. Alles wird lokal im Browser gespeichert.</p>
+      <div class="btns">
+        <button onclick="setStage('basics')">Basics</button>
+        <button class="secondary" onclick="setStage('content')">Inhalt</button>
+        <button class="secondary" onclick="setStage('writing')">Schreiben</button>
+        <button class="secondary" onclick="setStage('exam')">Kurz vor der Pruefung</button>
+      </div>
+      <div class="divider"></div>
+      <div class="btns">
+        <button class="secondary" onclick="exportProgress()">Fortschritt exportieren</button>
+        <button class="secondary" onclick="document.getElementById('importFile').click()">Importieren</button>
+        <input id="importFile" type="file" accept=".json" class="hidden" onchange="importProgress(event)">
+      </div>
+    </div>
+    <div class="card subtle">
+      <h3>Was du fuer die Klausur koennen musst</h3>
+      <ul class="topic-list">
+        <li>aktuelle Situation der indigenen Voelker</li>
+        <li>Mapuches: Leben, Werte, Kultur, Sprache, Landrechte</li>
+        <li>Diskriminierung und soziale Probleme</li>
+        <li>Wert indigener Sprachen und kultureller Vielfalt</li>
+        <li>Pro- und Contra-Argumente fuer Sprachschutz</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>Schreibformate</h3>
+      <ul class="topic-list">
+        <li><strong>resumen</strong> – neutral und knapp</li>
+        <li><strong>comentario</strong> – mit eigener Meinung und Argumenten</li>
+        <li><strong>mediacion</strong> – sin traduccion literal</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="grid cols-2">
+    <div class="card">
+      <div class="tabs">
+        <button class="tab active" id="tabTheory" onclick="showPanel('theory', this)">Lernkarten Inhalt</button>
+        <button class="tab secondary" id="tabArguments" onclick="showPanel('arguments', this)">Argumente</button>
+        <button class="tab secondary" id="tabWriting" onclick="showPanel('writing', this)">Schreibbausteine</button>
+        <button class="tab secondary" id="tabVocab" onclick="showPanel('vocab', this)">Vokabeln spaeter</button>
+      </div>
+
+      <div id="panel-theory">
+        <h2>Inhaltswissen kompakt</h2>
+        <div class="divider"></div>
+        <h3>1) Situacion actual de los pueblos indigenas</h3>
+        <ul class="bullet">
+          <li>Muchos pueblos indigenas siguen viviendo en situaciones dificiles.</li>
+          <li>Hay pobreza, discriminacion, racismo y falta de oportunidades.</li>
+          <li>Muchas comunidades no tienen el mismo acceso a educacion, salud y participacion politica.</li>
+          <li>Su cultura muchas veces no es suficientemente respetada.</li>
+        </ul>
+
+        <h3>2) Los mapuches</h3>
+        <ul class="bullet">
+          <li>Son un pueblo indigena de Chile y Argentina.</li>
+          <li>La tierra tiene un valor central para su identidad, su historia y su cultura.</li>
+          <li>Sus tradiciones, su lengua y su forma de vivir estan muy conectadas con la naturaleza.</li>
+          <li>Luchan por sus tierras, sus derechos y el reconocimiento de su cultura.</li>
+        </ul>
+
+        <h3>3) El mapudungun</h3>
+        <ul class="bullet">
+          <li>Es la lengua tradicional de los mapuches.</li>
+          <li>Esta en peligro porque cada vez hay menos hablantes.</li>
+          <li>En muchas familias ya no se transmite a las nuevas generaciones.</li>
+          <li>La discriminacion y la falta de apoyo institucional agravan el problema.</li>
+        </ul>
+
+        <h3>4) Herencia linguistica y cultural</h3>
+        <ul class="bullet">
+          <li>Las lenguas indigenas forman parte de la identidad de los pueblos.</li>
+          <li>Tambien son una parte importante de la historia y la diversidad cultural de Latinoamerica.</li>
+          <li>Sin ellas, Latinoamerica seria menos diversa y perderia una parte de su memoria cultural.</li>
+        </ul>
+      </div>
+
+      <div id="panel-arguments" class="hidden">
+        <h2>Pro / Contra / Soluciones</h2>
+        <div class="divider"></div>
+        <h3>Argumentos a favor de conservar las lenguas indigenas</h3>
+        <ul class="bullet">
+          <li>conservan la identidad cultural de los pueblos indigenas</li>
+          <li>protegen tradiciones, conocimientos y formas de pensar</li>
+          <li>son parte de la historia de Latinoamerica</li>
+          <li>enriquecen la diversidad linguistica y cultural</li>
+          <li>merecen respeto igual que otras lenguas</li>
+        </ul>
+        <h3>Argumentos en contra o dificultades</h3>
+        <ul class="bullet">
+          <li>hay pocos hablantes en algunas lenguas</li>
+          <li>muchos dicen que el espanol ya basta para la vida diaria</li>
+          <li>la proteccion requiere recursos, tiempo y personal</li>
+          <li>algunos consideran la desaparicion de ciertas lenguas un proceso natural</li>
+        </ul>
+        <h3>Posibles soluciones</h3>
+        <ul class="bullet">
+          <li>ensenar las lenguas en las escuelas y universidades</li>
+          <li>crear clases bilingues</li>
+          <li>usar las lenguas en politica y espacios publicos</li>
+          <li>publicar literatura, diccionarios y materiales didacticos</li>
+          <li>tomar medidas contra la discriminacion</li>
+          <li>dar mas voz a las comunidades indigenas</li>
+        </ul>
+      </div>
+
+      <div id="panel-writing" class="hidden">
+        <h2>Schreibbausteine fuer die Klausur</h2>
+        <div class="divider"></div>
+        <h3>Resumen</h3>
+        <ul class="bullet">
+          <li>El texto trata de...</li>
+          <li>Primero, el autor explica que...</li>
+          <li>Ademas, se menciona que...</li>
+          <li>Por ultimo, el texto muestra que...</li>
+        </ul>
+        <h3>Comentario</h3>
+        <ul class="bullet">
+          <li>En mi opinion,...</li>
+          <li>Me parece importante porque...</li>
+          <li>Por un lado..., por otro lado...</li>
+          <li>Estoy a favor de... porque...</li>
+          <li>En conclusion,...</li>
+        </ul>
+        <h3>Mediacion</h3>
+        <ul class="bullet">
+          <li>El texto dice que...</li>
+          <li>Se trata de...</li>
+          <li>Lo mas importante es que...</li>
+          <li>En general, el texto explica...</li>
+          <li>No traduzcas literal: simplifica y explica.</li>
+        </ul>
+      </div>
+
+      <div id="panel-vocab" class="hidden">
+        <h2>Vokabel-Bereich zum spaeteren Erweitern</h2>
+        <p>Hier kannst du spaeter eigene Vokabeln einfuegen. Sie werden lokal gespeichert.</p>
+        <textarea id="vocabBox" placeholder="z. B. la discriminacion = Diskriminierung&#10;la herencia = das Erbe&#10;preservar = bewahren"></textarea>
+        <div class="btns">
+          <button onclick="saveVocab()">Vokabeln speichern</button>
+          <button class="secondary" onclick="loadVocab()">Laden</button>
+          <button class="secondary" onclick="clearVocab()">Leeren</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card subtle">
+      <h2>Flashcards</h2>
+      <div class="flash" id="flashText">Klicke auf "Start", um zu lernen.</div>
+      <p class="small" id="flashHint">Vorderseite/Hinweis erscheint hier.</p>
+      <div class="btns">
+        <button onclick="startFlashcards()">Start</button>
+        <button class="secondary" onclick="flipFlashcard()">Karte drehen</button>
+        <button class="secondary" onclick="nextFlashcard()">Naechste</button>
+      </div>
+      <div class="divider"></div>
+      <div class="flex">
+        <div class="stat"><strong id="flashCount">0</strong><br><span class="small">gesehene Karten</span></div>
+        <div class="stat"><strong id="flashKnown">0</strong><br><span class="small">als sicher markiert</span></div>
+      </div>
+      <div class="btns">
+        <button class="secondary" id="knownBtn" onclick="markKnown()" disabled>Kannte ich</button>
+      </div>
+      <p class="small">"Kannte ich" geht nur einmal pro Karte und erst, nachdem du zur naechsten Karte gegangen bist.</p>
+    </div>
+  </section>
+
+  <section class="grid cols-2">
+    <div class="card">
+      <h2>Quiz – Wissen und Argumente</h2>
+      <div class="qa">
+        <div>
+          <h3 id="qTitle">Frage erscheint hier</h3>
+          <div id="qOptions" class="btns"></div>
+          <div id="qFeedback" class="feedback"></div>
+        </div>
+        <div class="flex">
+          <div class="stat"><strong id="quizScore">0</strong><br><span class="small">Punkte</span></div>
+          <div class="stat"><strong id="quizIndex">0</strong><br><span class="small">Fragen geloest</span></div>
+          <div class="stat"><strong id="quizStreak">0</strong><br><span class="small">Serie</span></div>
+        </div>
+        <div class="btns">
+          <button onclick="loadQuestion()">Naechste Frage</button>
+          <button class="secondary" onclick="resetQuiz()">Quiz neu</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card subtle">
+      <h2>Schreibtraining – Satzbaukasten</h2>
+      <p>Baue dir mit einem Klick gute Saetze zusammen. Du kannst sie unten noch veraendern.</p>
+      <div class="sentence-bank btns" id="sentenceBank"></div>
+      <textarea id="writeArea" placeholder="Hier deinen Text aufbauen..."></textarea>
+      <div class="btns">
+        <button onclick="copyText()">Text kopieren</button>
+        <button class="secondary" onclick="clearText()">Feld leeren</button>
+      </div>
+      <div id="copyMsg" class="small"></div>
+    </div>
+  </section>
+
+  <section class="grid cols-2">
+    <div class="card">
+      <h2>Kommentar-Trainer</h2>
+      <div class="answer" id="commentTask">
+        <strong>Aufgabe:</strong> In einer Schule in Chile wird diskutiert, ob indigene Sprachen wie das mapudungun staerker im Unterricht und im oeffentlichen Leben gefoerdert werden sollen. Schreibe einen comentario, in dem du den Wert der sprachlichen und kulturellen herencia de los pueblos indigenas erklaerst, Vorteile und Schwierigkeiten nennst und deine eigene Meinung begruendest.
+      </div>
+      <p>Schreibe jetzt deinen Kommentar dazu.</p>
+      <textarea id="commentInput" placeholder="Empfohlener Start: En mi opinion, es importante..."></textarea>
+      <div class="btns">
+        <button onclick="checkComment()">Checken</button>
+        <button class="secondary" onclick="newCommentTask()">Neue Aufgabenstellung</button>
+      </div>
+      <div class="answer" id="commentCheck"></div>
+    </div>
+
+    <div class="card subtle">
+      <h2>Mediacion-Trainer</h2>
+      <p>Uebe die Kurzform: erklaeren statt woertlich uebersetzen.</p>
+      <div class="answer">
+        <strong>Aufgabe:</strong> Ein deutscher Artikel erklaert, dass indigene Sprachen in Lateinamerika bedroht sind, weil viele junge Menschen sie nicht mehr lernen und weil es zu wenig staatliche Unterstuetzung gibt. Schreibe auf Spanisch 4-5 Saetze fuer eine Freundin in Spanien.
+      </div>
+      <textarea id="mediationInput" placeholder="Empfohlener Start: El texto dice que..."></textarea>
+      <div class="btns">
+        <button onclick="checkMediation()">Checken</button>
+      </div>
+      <div class="answer" id="mediationCheck"></div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>Exam Mode – kurz vor der Pruefung</h2>
+    <p>Wahle einen Modus und trainiere wie in der Klausur.</p>
+    <div class="btns">
+      <button onclick="loadExamTask('resumen')">Resumen</button>
+      <button class="secondary" onclick="loadExamTask('comentario')">Comentario</button>
+      <button class="secondary" onclick="loadExamTask('mediacion')">Mediacion</button>
+    </div>
+    <div class="divider"></div>
+    <div class="answer" id="examTask">Noch keine Aufgabe geladen.</div>
+    <textarea id="examAnswer" placeholder="Schreibe hier deine Antwort..."></textarea>
+    <div class="btns">
+      <button onclick="selfCheckExam()">Selbstcheck</button>
+      <button class="secondary" onclick="clearExam()">Leeren</button>
+    </div>
+    <div class="answer" id="examCheck"></div>
+    <p class="footer-note">Tipp: Im Exam Mode geht es nicht um perfekte automatische Korrektur, sondern um einen schnellen Fokus-Check kurz vor der Klausur.</p>
+  </section>
+
+  <section class="card subtle">
+    <h2>Vokabeln spaeter erweitern</h2>
+    <p>Dieser Bereich ist absichtlich weiter unten, damit der Fokus erstmal auf Inhalt, Argumenten und Schreiben bleibt.</p>
+    <textarea id="vocabBoxBottom" placeholder="Hier spaeter eigene Vokabeln sammeln..."></textarea>
+    <div class="btns">
+      <button onclick="syncVocabFromBottom()">Speichern</button>
+      <button class="secondary" onclick="loadVocabToBottom()">Laden</button>
+      <button class="secondary" onclick="clearVocabBottom()">Leeren</button>
+    </div>
+  </section>
+</div>
+
+<script>
+const STORAGE_KEY = 'spanisch_platform_state_v2';
+
+const commentTasks = [
+  'In einer Schule in Chile wird diskutiert, ob indigene Sprachen wie das mapudungun staerker im Unterricht und im oeffentlichen Leben gefoerdert werden sollen. Schreibe einen comentario, in dem du den Wert der sprachlichen und kulturellen herencia de los pueblos indigenas erklaerst, Vorteile und Schwierigkeiten nennst und deine eigene Meinung begruendest.',
+  'Eine Zeitung berichtet, dass viele junge Menschen in Lateinamerika keine indigene Sprache mehr lernen. Nimm in einem comentario Stellung dazu, warum das problematisch ist und was Schulen und Regierungen tun sollten.',
+  'In einem Kulturzentrum wird gefragt, ob der Schutz indigener Sprachen wirklich noch wichtig ist, wenn fast alle Menschen Spanisch sprechen. Schreibe einen comentario mit Pro- und Contra-Argumenten und einem klaren Fazit.',
+  'In Chile gibt es eine Debatte ueber die Rechte der Mapuches und ueber die Bedeutung ihrer Kultur fuer die Gesellschaft. Schreibe einen comentario, in dem du die aktuelle Situation beschreibst und Vorschlaege fuer eine gerechtere Zukunft machst.'
+];
+
+const state = {
+  stage: 'basics',
+  flashIndex: 0,
+  flashFront: true,
+  seenCards: [],
+  knownCards: [],
+  canMarkKnown: false,
+  lastKnownCardIndex: null,
+  quizScore: 0,
+  quizIndex: 0,
+  quizStreak: 0,
+  answeredQuestions: [],
+  currentQuestion: null,
+  currentExam: null,
+  commentChecks: 0,
+  mediationChecks: 0,
+  examChecks: 0,
+  vocabText: ''
+};
+
+const flashcards = [
+  {front:'Los mapuches', back:'Son un pueblo indigena de Chile y Argentina.'},
+  {front:'La tierra', back:'Es central para la identidad, la cultura y la historia de los mapuches.'},
+  {front:'Mapudungun', back:'Es la lengua tradicional de los mapuches; esta en peligro.'},
+  {front:'Problemas actuales', back:'pobreza, discriminacion, racismo, falta de oportunidades.'},
+  {front:'Herencia linguistica', back:'Las lenguas indigenas son parte de la identidad y la historia cultural.'},
+  {front:'Solucion importante', back:'ensenanza bilingue y mas presencia publica de las lenguas.'},
+  {front:'Comentario', back:'Debe incluir opinion, argumentos, ejemplo y conclusion.'},
+  {front:'Mediacion', back:'Hay que explicar y resumir, no traducir palabra por palabra.'},
+  {front:'Discriminacion', back:'Puede afectar la lengua, la cultura, la educacion y la participacion social.'},
+  {front:'Lucha por los derechos', back:'Muchas comunidades luchan por tierras, reconocimiento y respeto.'}
+];
+
+const quiz = [
+  {q:'Por que es importante conservar las lenguas indigenas?',options:['Porque forman parte de la identidad y la cultura.','Porque sustituyen completamente al espanol.','Porque solo sirven para el pasado.'],correct:0,explain:'Correcto: las lenguas forman parte de la identidad cultural y de la diversidad de Latinoamerica.'},
+  {q:'Cual es un problema actual de muchos pueblos indigenas?',options:['Mucho turismo de lujo','Discriminacion y pobreza','Exceso de derechos politicos'],correct:1,explain:'Correcto: en tus apuntes aparecen discriminacion, racismo, pobreza y falta de oportunidades.'},
+  {q:'Que pasa con el mapudungun?',options:['Tiene cada vez mas hablantes','Esta en peligro','Es la lengua oficial de toda Latinoamerica'],correct:1,explain:'Correcto: muchas nuevas generaciones ya no lo aprenden.'},
+  {q:'Que seria una buena solucion?',options:['Prohibir el uso publico del espanol','Ensenar lenguas indigenas en escuelas','Ignorar el problema'],correct:1,explain:'Correcto: la ensenanza bilingue es una de las soluciones clave.'},
+  {q:'Que debe hacer una mediacion?',options:['Traducir literal','Explicar solo lo relevante','Copiar frases del texto original'],correct:1,explain:'Correcto: se transmite la informacion relevante de manera adecuada.'},
+  {q:'Que argumento en contra aparece en tus apuntes?',options:['La proteccion cuesta recursos','Las lenguas no tienen historia','No existe discriminacion'],correct:0,explain:'Correcto: una dificultad es que se necesitan recursos, tiempo y personal.'},
+  {q:'Por que la tierra es tan importante para los mapuches?',options:['Solo por la agricultura moderna','Porque forma parte de su identidad y cultura','Porque quieren construir mas ciudades'],correct:1,explain:'Correcto: la tierra esta estrechamente ligada a la historia y a la identidad mapuche.'},
+  {q:'Que pasa si una lengua desaparece?',options:['No cambia nada','Se pierde parte de la cultura y de la memoria','Se fortalece automaticamente otra lengua'],correct:1,explain:'Correcto: con la lengua se pierden tradiciones, conocimientos y formas de pensar.'},
+  {q:'Que seria una buena frase para empezar un comentario?',options:['En mi opinion...','El texto dice exactamente palabra por palabra...','No tengo argumentos pero...'],correct:0,explain:'Correcto: un comentario necesita una postura personal.'},
+  {q:'Que grupo necesita mas apoyo para que una lengua sobreviva?',options:['Solo turistas','Jovenes y escuelas, junto con instituciones','Solo empresas privadas'],correct:1,explain:'Correcto: sin transmision a nuevas generaciones, la lengua pierde futuro.'}
+];
+
+const sentenceParts = [
+  'El texto trata de ',
+  'En mi opinion, ',
+  'Por un lado, ',
+  'Por otro lado, ',
+  'Es importante conservar las lenguas indigenas porque ',
+  'Los mapuches son un pueblo indigena que ',
+  'Hoy en dia, muchas comunidades sufren ',
+  'Una posible solucion seria ',
+  'Ademas, ',
+  'Sin embargo, ',
+  'Esto muestra que ',
+  'En conclusion, '
+];
+
+function saveState(){
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+}
+function loadState(){
+  const raw = localStorage.getItem(STORAGE_KEY);
+  if(!raw) return;
+  try{
+    const data = JSON.parse(raw);
+    Object.assign(state, data);
+  }catch(e){}
+}
+function uniqueCount(arr){
+  return [...new Set(arr)].length;
+}
+function computeMastery(){
+  const cardsSeenRatio = Math.min(uniqueCount(state.seenCards) / flashcards.length, 1);
+  const cardsKnownRatio = Math.min(uniqueCount(state.knownCards) / flashcards.length, 1);
+  const quizRatio = Math.min(state.quizIndex / 12, 1);
+  const quizAccuracy = state.quizIndex > 0 ? state.quizScore / state.quizIndex : 0;
+  const writingRatio = Math.min((state.commentChecks + state.mediationChecks + state.examChecks) / 10, 1);
+  const stageBase = {basics:0.10, content:0.25, writing:0.45, exam:0.65}[state.stage] || 0.10;
+
+  const score = (
+    stageBase * 0.15 +
+    cardsSeenRatio * 0.20 +
+    cardsKnownRatio * 0.20 +
+    quizRatio * 0.15 +
+    quizAccuracy * 0.15 +
+    writingRatio * 0.15
+  ) * 100;
+
+  return Math.max(3, Math.round(score));
+}
+function updateUI(){
+  document.getElementById('stageLabel').textContent = ({
+    basics:'Basics',
+    content:'Inhalt',
+    writing:'Schreiben',
+    exam:'Kurz vor der Pruefung'
+  })[state.stage];
+  const mastery = computeMastery();
+  document.getElementById('masteryBar').style.width = mastery + '%';
+  document.getElementById('masteryPercent').textContent = mastery + '%';
+  document.getElementById('flashCount').textContent = uniqueCount(state.seenCards);
+  document.getElementById('flashKnown').textContent = uniqueCount(state.knownCards);
+  document.getElementById('quizScore').textContent = state.quizScore;
+  document.getElementById('quizIndex').textContent = state.quizIndex;
+  document.getElementById('quizStreak').textContent = state.quizStreak;
+  document.getElementById('knownBtn').disabled = !state.canMarkKnown;
+  document.getElementById('masteryHint').textContent = 'Karten ' + uniqueCount(state.knownCards) + '/' + flashcards.length + ' sicher · Quiz ' + state.quizScore + '/' + state.quizIndex;
+  saveState();
+}
+function setStage(stage){
+  state.stage = stage;
+  updateUI();
+}
+
+function showPanel(name, el){
+  ['theory','arguments','writing','vocab'].forEach(id=>{
+    const panel = document.getElementById('panel-'+id);
+    if(panel) panel.classList.add('hidden');
+  });
+  const active = document.getElementById('panel-'+name);
+  if(active) active.classList.remove('hidden');
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+}
+
+function startFlashcards(){
+  state.flashIndex = 0;
+  state.flashFront = true;
+  state.canMarkKnown = false;
+  renderFlashcard();
+  updateUI();
+}
+function renderFlashcard(){
+  const card = flashcards[state.flashIndex % flashcards.length];
+  document.getElementById('flashText').textContent = state.flashFront ? card.front : card.back;
+  document.getElementById('flashHint').textContent = state.flashFront ? 'Vorderseite' : 'Rueckseite';
+}
+function flipFlashcard(){
+  state.flashFront = !state.flashFront;
+  renderFlashcard();
+}
+function nextFlashcard(){
+  const currentIndex = state.flashIndex % flashcards.length;
+  if(!state.seenCards.includes(currentIndex)) state.seenCards.push(currentIndex);
+  state.flashIndex = (state.flashIndex + 1) % flashcards.length;
+  state.flashFront = true;
+  state.canMarkKnown = true;
+  state.lastKnownCardIndex = state.flashIndex % flashcards.length;
+  renderFlashcard();
+  updateUI();
+}
+function markKnown(){
+  if(!state.canMarkKnown) return;
+  const idx = state.lastKnownCardIndex;
+  if(idx !== null && !state.knownCards.includes(idx)){
+    state.knownCards.push(idx);
+  }
+  state.canMarkKnown = false;
+  updateUI();
+}
+
+function loadQuestion(){
+  let pool = quiz.filter((_, idx) => !state.answeredQuestions.includes(idx));
+  if(pool.length === 0){
+    state.answeredQuestions = [];
+    pool = quiz.slice();
+  }
+  const picked = pool[Math.floor(Math.random()*pool.length)];
+  const qIndex = quiz.findIndex(item => item.q === picked.q);
+  state.currentQuestion = { ...picked, internalIndex: qIndex };
+  document.getElementById('qTitle').textContent = picked.q;
+  document.getElementById('qOptions').innerHTML = '';
+  document.getElementById('qFeedback').textContent = '';
+  picked.options.forEach((opt, idx)=>{
+    const b = document.createElement('button');
+    b.className = 'secondary';
+    b.textContent = opt;
+    b.onclick = () => answerQuestion(idx);
+    document.getElementById('qOptions').appendChild(b);
+  });
+  saveState();
+}
+function answerQuestion(idx){
+  if(!state.currentQuestion) return;
+  const ok = idx === state.currentQuestion.correct;
+  const box = document.getElementById('qFeedback');
+  box.textContent = (ok ? 'Richtig. ' : 'Nicht ganz. ') + state.currentQuestion.explain;
+  box.className = 'feedback ' + (ok ? 'good' : 'warn');
+  if(ok){
+    state.quizScore += 1;
+    state.quizStreak += 1;
+  } else {
+    state.quizStreak = 0;
+  }
+  state.quizIndex += 1;
+  if(!state.answeredQuestions.includes(state.currentQuestion.internalIndex)){
+    state.answeredQuestions.push(state.currentQuestion.internalIndex);
+  }
+  updateUI();
+}
+function resetQuiz(){
+  state.quizScore = 0;
+  state.quizIndex = 0;
+  state.quizStreak = 0;
+  state.answeredQuestions = [];
+  document.getElementById('qTitle').textContent = 'Frage erscheint hier';
+  document.getElementById('qOptions').innerHTML = '';
+  document.getElementById('qFeedback').textContent = '';
+  updateUI();
+}
+
+function initSentenceBank(){
+  const bank = document.getElementById('sentenceBank');
+  sentenceParts.forEach(part=>{
+    const b = document.createElement('button');
+    b.textContent = part;
+    b.onclick = ()=> {
+      const area = document.getElementById('writeArea');
+      area.value += part;
+      area.focus();
+    };
+    bank.appendChild(b);
+  });
+}
+function copyText(){
+  const area = document.getElementById('writeArea');
+  area.select();
+  document.execCommand('copy');
+  document.getElementById('copyMsg').textContent = 'Text kopiert.';
+}
+function clearText(){
+  document.getElementById('writeArea').value = '';
+  document.getElementById('copyMsg').textContent = '';
+}
+
+function containsOne(text, arr){
+  const t = text.toLowerCase();
+  return arr.some(w => t.includes(w));
+}
+function checkComment(){
+  state.commentChecks += 1;
+  const text = document.getElementById('commentInput').value.trim();
+  const checks = [];
+  checks.push(containsOne(text, ['en mi opinion','pienso que','me parece']) ? '✔ Meinung vorhanden' : '✘ Fuege eine Meinung hinzu');
+  checks.push(containsOne(text, ['porque','ya que','debido a']) ? '✔ Begruendung vorhanden' : '✘ Begruendung fehlt');
+  checks.push(containsOne(text, ['por un lado','por otro lado','sin embargo']) ? '✔ Argumentstruktur vorhanden' : '✘ Nutze Verknuepfungen');
+  checks.push(containsOne(text, ['mapuche','lenguas indigenas','herencia','cultura','identidad']) ? '✔ Thematisch passend' : '✘ Mehr Bezug zum Thema einbauen');
+  checks.push(containsOne(text, ['en conclusion','para concluir','en resumen']) ? '✔ Schluss vorhanden' : '✘ Schreibe einen Schluss');
+  checks.push(text.split(/\s+/).length >= 60 ? '✔ Gute Laenge' : '✘ Noch etwas laenger schreiben');
+  document.getElementById('commentCheck').innerHTML = checks.join('<br>');
+  updateUI();
+}
+function newCommentTask(){
+  const current = document.getElementById('commentTask').textContent;
+  let next = commentTasks[Math.floor(Math.random()*commentTasks.length)];
+  while(current.includes(next) && commentTasks.length > 1){
+    next = commentTasks[Math.floor(Math.random()*commentTasks.length)];
+  }
+  document.getElementById('commentTask').innerHTML = '<strong>Aufgabe:</strong> ' + next;
+}
+
+function checkMediation(){
+  state.mediationChecks += 1;
+  const text = document.getElementById('mediationInput').value.trim();
+  const checks = [];
+  checks.push(containsOne(text, ['el texto dice que','el texto trata de','se trata de']) ? '✔ Guter Einstieg fuer Mediacion' : '✘ Starte neutral, z. B. con "El texto dice que..."');
+  checks.push(containsOne(text, ['lenguas','idiomas']) ? '✔ Thema Sprache genannt' : '✘ Nenne das Sprachthema');
+  checks.push(containsOne(text, ['jovenes','nuevas generaciones','ninos']) ? '✔ Generationenproblem genannt' : '✘ Erklaere, dass viele junge Menschen die Sprache nicht mehr lernen');
+  checks.push(containsOne(text, ['gobierno','estado','apoyo','instituciones']) ? '✔ Mangelnde Unterstuetzung genannt' : '✘ Erwaehne fehlende staatliche Unterstuetzung');
+  checks.push(text.split(/\s+/).length >= 30 ? '✔ Gute Laenge' : '✘ Noch 1-2 Saetze mehr');
+  document.getElementById('mediationCheck').innerHTML = checks.join('<br>');
+  updateUI();
+}
+
+function loadExamTask(type){
+  const tasks = {
+    resumen: 'Resume en espanol la situacion actual de los pueblos indigenas en Latinoamerica y menciona dos problemas centrales.',
+    comentario: 'Comenta el valor de la herencia linguistica y cultural de los pueblos indigenas en Latinoamerica. Incluye argumentos a favor, dificultades y una posible solucion.',
+    mediacion: 'Una amiga en Madrid no sabe nada sobre los mapuches. Explicale en espanol quien son, por que la tierra es importante para ellos y que problemas tienen hoy.'
+  };
+  state.currentExam = type;
+  document.getElementById('examTask').textContent = tasks[type];
+  saveState();
+}
+function selfCheckExam(){
+  state.examChecks += 1;
+  const txt = document.getElementById('examAnswer').value.trim().toLowerCase();
+  if(!state.currentExam){
+    document.getElementById('examCheck').textContent = 'Lade zuerst eine Aufgabe.';
+    return;
+  }
+  const out = [];
+  if(state.currentExam === 'resumen'){
+    out.push(containsOne(txt,['pueblos indigenas','indigenas']) ? '✔ Thema genannt' : '✘ Thema fehlt');
+    out.push(containsOne(txt,['discriminacion','racismo']) ? '✔ Problem 1 genannt' : '✘ Ein Problem fehlt');
+    out.push(containsOne(txt,['pobreza','falta de oportunidades','educacion','salud']) ? '✔ Problem 2 genannt' : '✘ Ein zweites Problem fehlt');
+    out.push(!containsOne(txt,['en mi opinion','pienso que']) ? '✔ Fuer Resumen neutral geblieben' : '✘ Fuer Resumen neutraler schreiben');
+  }
+  if(state.currentExam === 'comentario'){
+    out.push(containsOne(txt,['en mi opinion','me parece','pienso que']) ? '✔ Meinung vorhanden' : '✘ Meinung einfuegen');
+    out.push(containsOne(txt,['identidad','cultura','diversidad']) ? '✔ Wert / Bedeutung vorhanden' : '✘ Erklaere den Wert klarer');
+    out.push(containsOne(txt,['sin embargo','por otro lado','recursos']) ? '✔ Schwierigkeit/Gegenargument vorhanden' : '✘ Nenne auch eine Schwierigkeit');
+    out.push(containsOne(txt,['escuelas','bilingues','gobierno','politica']) ? '✔ Loesung vorhanden' : '✘ Eine Loesung nennen');
+  }
+  if(state.currentExam === 'mediacion'){
+    out.push(containsOne(txt,['mapuches']) ? '✔ Volk genannt' : '✘ Mapuches nennen');
+    out.push(containsOne(txt,['tierra']) ? '✔ Bedeutung der tierra genannt' : '✘ Tierra erklaeren');
+    out.push(containsOne(txt,['discriminacion','pobreza','lengua']) ? '✔ Heutige Probleme genannt' : '✘ Heutige Probleme nennen');
+    out.push(!containsOne(txt,['wortlich','uebersetzung']) ? '✔ Klingt wie echte Erklaerung' : '✘ Einfach und frei erklaeren');
+  }
+  document.getElementById('examCheck').innerHTML = out.join('<br>');
+  updateUI();
+}
+function clearExam(){
+  document.getElementById('examAnswer').value = '';
+  document.getElementById('examCheck').textContent = '';
+}
+
+function saveVocab(){
+  state.vocabText = document.getElementById('vocabBox').value;
+  document.getElementById('vocabBoxBottom').value = state.vocabText;
+  saveState();
+}
+function loadVocab(){
+  document.getElementById('vocabBox').value = state.vocabText || '';
+}
+function clearVocab(){
+  state.vocabText = '';
+  document.getElementById('vocabBox').value = '';
+  document.getElementById('vocabBoxBottom').value = '';
+  saveState();
+}
+function syncVocabFromBottom(){
+  state.vocabText = document.getElementById('vocabBoxBottom').value;
+  const top = document.getElementById('vocabBox');
+  if(top) top.value = state.vocabText;
+  saveState();
+}
+function loadVocabToBottom(){
+  document.getElementById('vocabBoxBottom').value = state.vocabText || '';
+}
+function clearVocabBottom(){
+  clearVocab();
+}
+
+function exportProgress(){
+  const data = JSON.stringify(state, null, 2);
+  const blob = new Blob([data], {type: 'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'spanisch_fortschritt.json';
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+}
+function importProgress(event){
+  const file = event.target.files && event.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = function(){
+    try{
+      const data = JSON.parse(reader.result);
+      Object.assign(state, data);
+      saveState();
+      loadVocab();
+      loadVocabToBottom();
+      renderFlashcard();
+      updateUI();
+      alert('Fortschritt importiert.');
+    }catch(e){
+      alert('Import fehlgeschlagen. Bitte eine gueltige JSON-Datei verwenden.');
+    }
+  };
+  reader.readAsText(file);
+  event.target.value = '';
+}
+
+loadState();
+updateUI();
+initSentenceBank();
+loadQuestion();
+loadVocab();
+loadVocabToBottom();
+renderFlashcard();
+</script>
+</body>
+</html>
